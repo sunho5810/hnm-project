@@ -1,23 +1,35 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { authenticateAction } from '../redux/actions/authenticateAction'
 
-const Login = ({setAuthenticate}) => {
+const Login = () => {
+
+    const [id, setId] = useState("");
+    const [password, setPassword] = useState("");
 
     const Navigate = useNavigate();
 
-    const loginFunc = (e) => {
+    const dispatch = useDispatch();
+
+    const login = (e) => {
         e.preventDefault();
-        setAuthenticate(true);
+        dispatch(authenticateAction.login(id, password));
+        // dispatch(authenticateAction.checkAuthenticate(true));
         Navigate("/");
     }
 
   return (
     <Container>
-        <Form onSubmit={loginFunc}>
+        <Form onSubmit={login}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
-                <Form.Control type="email" placeholder="Enter email" />
+                <Form.Control
+                    type="email"
+                    placeholder="Enter email"
+                    onChange={(e) => setId(e.target.value)}
+                />
                 <Form.Text className="text-muted">
                 We'll never share your email with anyone else.
                 </Form.Text>
@@ -25,7 +37,11 @@ const Login = ({setAuthenticate}) => {
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" />
+                <Form.Control
+                    type="password"
+                    placeholder="Password"
+                    onChange={(e) => setPassword(e.target.value)}
+                />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
                 <Form.Check type="checkbox" label="Check me out" />

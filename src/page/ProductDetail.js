@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Col, Container, Row, Form, Button } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom'
+import { productAction } from '../redux/actions/productAction';
 
 const ProductDetail = () => {
 
     /* 진짜 외워야됨 */
-    const [productDetail, setProductDetail] = useState(null);
+    // const [productDetail, setProductDetail] = useState(null);
+    const productDetail = useSelector((state) => state.product.productDetail);
 
     const {id} = useParams();
 
-    const getProductDetail = async() => {
-        let url = `http://localhost:5000/products/${id}`;
-        let response = await fetch(url);
-        let data = await response.json();
+    const dispatch = useDispatch();
 
-        setProductDetail(data);
+    const getProductDetail = async() => {
+        dispatch(productAction.getProductDetail(id));
     }
 
     useEffect(()=>{

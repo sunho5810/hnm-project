@@ -1,21 +1,25 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import ProductCard from '../component/ProductCard';
 import { useSearchParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { productAction } from '../redux/actions/productAction';
 
 const ProductAll = () => {
 
-    const [products, setProducts] = useState([]);
-    const [query, setQuery] = useSearchParams(); /* 진짜 외워야됨 setQuery는 안씀 */
+    const products = useSelector((state) => state.product.products);
 
-    const getProduct = async() => {
+    const [query, setQuery] = useSearchParams(); /* 진짜 외워야됨 */
+
+    const dispatch = useDispatch();
+
+    const getProduct = () => {
         let searchQuery = query.get("q") || ""; /* 진짜 외워야됨 */
         console.log("query?", searchQuery);
-        let url = `http://localhost:5000/products?q=${searchQuery}`; /* 진짜 외워야됨 */
-        let response = await fetch(url);
-        let data = await response.json();
-
-        setProducts(data);        
+        
+        // productAction.getProduct()를 거쳐서 가게 해줌 -> 미들웨어
+        // 전달해야되는 값은 매개변수로 전달
+        dispatch(productAction.getProduct(searchQuery)); 
     }
 
     useEffect(()=>{
